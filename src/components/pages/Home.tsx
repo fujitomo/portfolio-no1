@@ -58,16 +58,7 @@ export default function Home() {
   return (
     <ThemeProvider theme={theme}>
       <HeaderTabs />
-      <TextField
-        margin="normal"
-        required
-        fullWidth
-        id="email"
-        label="Email Address"
-        name="email"
-        autoComplete="email"
-        autoFocus
-      />
+      HOME
     </ThemeProvider>
   );
 }
