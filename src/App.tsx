@@ -3,8 +3,9 @@ import "./App.css";
 import Login from "./components/pages/Login/Login";
 import Home from "./components/pages/Home";
 import { LoginProvider } from "./components/shared/LoginProvider";
+import { useEffect, useContext } from "react";
+import { useNavigate } from "react-router-dom";
 
-import HeaderTabs from "./components/template/Header";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 function App() {

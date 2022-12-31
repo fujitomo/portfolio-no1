@@ -12,7 +12,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useEffect, useContext } from "react";
-import HeaderTabs from "../template/Header";
+import HeaderTabs from "../template/TabHeader";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../shared/LoginProvider";
 
@@ -50,15 +50,19 @@ export default function Home() {
 
   const navigate = useNavigate();
 
+  const testLogin = () => {
+    setLogin(false);
+    localStorage.clear();
+  };
+
   useEffect(() => {
-    console.log(login);
-    if (!login) navigate("/login");
-  }, [login]);
+    let isLogin = localStorage.getItem("login");
+    if (!isLogin && !login) navigate("/login");
+  }, [login, navigate]);
 
   return (
     <ThemeProvider theme={theme}>
       <HeaderTabs />
-      HOME
     </ThemeProvider>
   );
 }

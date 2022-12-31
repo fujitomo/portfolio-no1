@@ -13,10 +13,11 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Suumo_Title from "../../../images/Suumo_Title.png";
 import styles from "./Login.module.css";
-import HeaderTabs from "../../template/Header";
+
 import { LoginContext } from "../../shared/LoginProvider";
 import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "../../template/Header";
 
 function Copyright(props: any) {
   return (
@@ -51,18 +52,20 @@ export default function Login() {
 
   const testLogin = () => {
     setLogin(true);
-    console.log(login);
+    localStorage.setItem("login", "true");
   };
 
   const navigate = useNavigate();
-
   useEffect(() => {
-    if (login) navigate("/");
-  }, [login]);
+    var localLogin = localStorage.getItem("login");
+    if (localLogin || login) {
+      navigate("/");
+    }
+  }, [login, navigate]);
 
   return (
-    <ThemeProvider theme={theme}>
-      <HeaderTabs />
+    <>
+      <Header />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -129,6 +132,6 @@ export default function Login() {
         </Box>
         <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-    </ThemeProvider>
+    </>
   );
 }
