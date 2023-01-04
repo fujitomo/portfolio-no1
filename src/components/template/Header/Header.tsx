@@ -7,7 +7,7 @@ import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
 
 import { useNavigate } from "react-router-dom";
-import { LoginContext } from "../shared/LoginProvider";
+import { LoginContext } from "../../shared/LoginProvider";
 import styles from "./Header.module.css";
 
 export default function Header() {

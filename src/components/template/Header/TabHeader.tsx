@@ -5,11 +5,13 @@ import Tabs from "@material-ui/core/Tabs";
 import Tab from "@material-ui/core/Tab";
 import Typography from "@material-ui/core/Typography";
 import Box from "@material-ui/core/Box";
+import Paper from "@mui/material/Paper";
 
 import { useNavigate } from "react-router-dom";
-import { LoginContext } from "../shared/LoginProvider";
+import { LoginContext } from "../../shared/LoginProvider";
 import styles from "./Header.module.css";
-import ScrapingConditions from "../../components/pages/ScrapingConditions";
+import ScrapingConditions from "../../pages/ScrapingConditions";
+import { ListProperties } from "../../pages/ListProperties";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -30,7 +32,7 @@ function TabPanel(props: TabPanelProps) {
     >
       {value === index && (
         <Box p={3}>
-          <Typography>{children}</Typography>
+          <Typography component={"div"}>{children}</Typography>
         </Box>
       )}
     </div>
@@ -83,7 +85,7 @@ export default function HeaderTabs() {
         <ScrapingConditions />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        物件一覧
+        <ListProperties />
       </TabPanel>
       <TabPanel value={value} index={2}>
         Item Three

@@ -1,0 +1,15 @@
+.searchButtonStyles {
+  width: 100%;
+  height: 45px;
+  margin-left: 0.5em !important;
+}
+
+.csvButtonStyles {
+  width: 120%;
+  height: 45px;
+}
+
+.buttonPosition {
+  text-align: right;
+  width: 70%;
+}

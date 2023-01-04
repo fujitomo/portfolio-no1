@@ -1,60 +1,32 @@
-import * as React from "react";
-import Avatar from "@mui/material/Avatar";
-import Button from "@mui/material/Button";
+import { useEffect, useContext, useRef, useState } from "react";
+import { SubmitHandler, useForm } from "react-hook-form";
+import {
+  Button,
+  TextField,
+  Checkbox,
+  Link,
+  Grid,
+  Box,
+  Typography,
+  Container,
+} from "@mui/material";
 import CssBaseline from "@mui/material/CssBaseline";
-import TextField from "@mui/material/TextField";
 import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import Link from "@mui/material/Link";
-import Grid from "@mui/material/Grid";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import Suumo_Title from "../../../images/Suumo_Title.png";
 import styles from "./Login.module.css";
-
 import { LoginContext } from "../../shared/LoginProvider";
-import { useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../template/Header";
-
-function Copyright(props: any) {
-  return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
-  );
-}
+import Header from "../../template/Header/Header";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
 
 const theme = createTheme();
 
 export default function Login() {
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
   const { login, setLogin } = useContext(LoginContext);
 
-  const testLogin = () => {
-    setLogin(true);
-    localStorage.setItem("login", "true");
-  };
-
+  //ログイン時ページ遷移用
   const navigate = useNavigate();
   useEffect(() => {
     var localLogin = localStorage.getItem("login");
@@ -63,8 +35,49 @@ export default function Login() {
     }
   }, [login, navigate]);
 
+  //TODO バリデーションをフックに分離する？
+
+  //フォーム送信時の処理;
+  const onSubmit: SubmitHandler<SampleFormInput> = (data: any) => {
+    // バリデーションチェックOK！なときに行う処理を追加
+    setLogin(true);
+    localStorage.setItem("login", "true");
+  };
+
+  // フォームの型
+  interface SampleFormInput {
+    email: string;
+    name: string;
+    password: string;
+  }
+
+  // バリデーションルール
+  const schema = yup.object({
+    email: yup
+      .string()
+      .required("必須だよ")
+      .email("正しいメールアドレス入力してね"),
+    password: yup
+      .string()
+      .required("必須だよ")
+      .min(6, "少ないよ")
+      //TODO　.$が必要な理由を後で調べる
+      .matches(
+        /^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&].*$/,
+        "パスワードには大文字、小文字、数字、記号のすべてを入れてください。"
+      ),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm<SampleFormInput>({
+    resolver: yupResolver(schema),
+  });
+
   return (
-    <>
+    <ThemeProvider theme={theme}>
       <Header />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
@@ -79,29 +92,32 @@ export default function Login() {
           <img src={Suumo_Title} alt="架空の株式会社 Dummy" />
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            //onSubmit={handleSubmit}
             noValidate
             sx={{ mt: 1 }}
           >
             <TextField
               margin="normal"
-              required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
-              autoFocus
+              required
+              inputProps={{ maxLength: 40 }}
+              label="メールアドレス"
+              type="email"
+              {...register("email")}
+              error={"email" in errors}
+              helperText={errors.email?.message}
             />
+
             <TextField
-              margin="normal"
-              required
               fullWidth
-              name="password"
-              label="Password"
-              type="password"
-              id="password"
+              required
               autoComplete="current-password"
+              inputProps={{ maxLength: 63 }}
+              label="パスワード"
+              type="password"
+              {...register("password")}
+              error={"password" in errors}
+              helperText={errors.password?.message}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -112,7 +128,7 @@ export default function Login() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={testLogin}
+              onClick={handleSubmit(onSubmit)}
             >
               ログイン
             </Button>
@@ -122,16 +138,10 @@ export default function Login() {
                   パスワードを忘れましたか？
                 </Link>
               </Grid>
-              {/* <Grid item>
-                <Link href="#" variant="body2">
-                  <Typography></Typography>
-                </Link>
-              </Grid> */}
             </Grid>
           </Box>
         </Box>
-        <Copyright sx={{ mt: 8, mb: 4 }} />
       </Container>
-    </>
+    </ThemeProvider>
   );
 }

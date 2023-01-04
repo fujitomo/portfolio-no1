@@ -12,7 +12,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useEffect, useContext } from "react";
-import HeaderTabs from "../template/TabHeader";
+import HeaderTabs from "../template/Header/TabHeader";
 import { useNavigate } from "react-router-dom";
 import { LoginContext } from "../shared/LoginProvider";
 
